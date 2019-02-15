@@ -22,5 +22,5 @@ cmds.rename(cubeshape, cubeshape + suffix)
 cubeshape = cubeshape + suffix
 
 # Check if the new suffix has been applied
-if cubeshape.endswith('new'):
+if cubeshape.endswith(suffix):
     print 'Yep!'
