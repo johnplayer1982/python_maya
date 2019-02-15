@@ -15,32 +15,38 @@ SUFFIXES = {
 DEFAULT_SUFFIX = "grp"
 
 # Create the rename() function
-def rename():
+def rename(selection=False):
+
+    # Help text
+    """
+    This function will rename any objects to have the correct suffix
+    :param selection: Whether or not we use the current selection
+    :return: A list of all the objects we operated on
+    """
+    # Trigger in Maya by typing:
+    # import objectRenamer as rn
+    # reload(rn)
+    # print help(rn.rename)
 
     # Create a new variable 'selection'
     # Store in it the currently selected objects
 
-    selection = cmds.ls(selection=True)
+    object = cmds.ls(selection=selection, dag=True, long=True)
 
-    # If the selection contains 0 lists
-
-    if len(selection) == 0:
-
-        # Then get all objects in the outliner and assign to 'selection'
-        # long=True : Gives us the full path to the object, so we can determine any parents.
-        # dag=True : We will only get objects which are listed in the outliner, and none of the hidden objects inside of Maya.
-
-        selection = cmds.ls(dag=True, long=True)
+    # if the objects in empty and there is no selection
+    if selection and not object:
+        # Raise a runtime error
+        raise RuntimeError("You don't have anything selected")
 
     # Sort the list now stored in 'selection'
     # Sort by length
     # In reverse, giving us the longest path first
 
-    selection.sort(key=len, reverse=True)
+    object.sort(key=len, reverse=True)
 
     # For each object now in the 'selection' variable
 
-    for obj in selection:
+    for obj in object:
 
         # Split the path by "|" (pipe)
         # Store in a new variable 'shortName'
@@ -79,11 +85,17 @@ def rename():
             continue
 
         # If the object name already contains the _ suffix, continue and do not apply the new name
-        if obj.endswith(suffix):
+        if obj.endswith("_"+suffix):
             continue
 
         # Lets now create a string which contains the new amended object name, based on our code:
-        newName = shortName + "_" + suffix
+        new_name = "%s_%s" % (shortName, suffix)
 
         # Lets now rename the objects
-        cmds.rename(obj, newName)
+        cmds.rename(obj, new_name)
+
+        index = object.index(obj)
+        object[index] = obj.replace(shortName, new_name)
+
+    return object
+
