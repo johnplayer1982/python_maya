@@ -1,17 +1,22 @@
 # Split a string into a list
 
-# Import maya commands library
-from maya import cmds
-
 # Create a new string
 string = "Hello my name is John"
-print string
+
+# <type 'str'>
+print type(string)
+
 # Output = Hello my name is John
+print string
 
 # Split the string into a list
 list = string.split()
-print list
+
+# <type 'list'>
+print type(list)
+
 # Output = ['Hello', 'my', 'name', 'is', 'John']
+print list
 
 # Select specific items in the list
 print list[0]   # Hello
