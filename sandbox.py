@@ -7,3 +7,4 @@ objectText = "I_am_new"
 # Check if the object ends with 'new'
 if objectText .endswith(suffix):
     print "Object text is suffixed new"
+
