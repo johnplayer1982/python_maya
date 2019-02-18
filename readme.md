@@ -17,4 +17,22 @@ Example scripts are prefixed with "ex_" and show small examples of methods and f
 Renames objects based on type and returns a list of all of the renamed objects.
 Camera's are bypassed.
 
+*gearCreator.py*
 
+Allows you to easily create a gear shape.
+
+Default values are specified in the script (teeth=10, length=0.3)
+
+```
+import gearCreator as gc
+gc.createGear()
+
+```
+
+Or specify override values in the function call
+
+```
+import gearCreator as gc
+gc.createGear(teeth=20, length=0.3)
+
+```
