@@ -1,7 +1,6 @@
 # Import the maya commands library
 from maya import cmds
 
-
 # Create gear function
 # teeth = Number of teeth the gear will have
 # length = How long the teeth will be
@@ -10,6 +9,13 @@ def createGear(teeth=10, length=0.3):
 
     """
     This function will create a gear object with the given parameters
+    To run this from within Maya:
+
+        import gearCreator as gc
+        reload(gc)
+        transform, constructor, extrude = gc.createGear()
+        gc.changeTeeth(constructor, extrude, teeth=40, length=0.2)
+
     :param teeth: The number of teeth to create
     :param length: The length of the teeth
     :return: A tuple of the transform, constructor and extrude node
