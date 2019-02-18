@@ -4,11 +4,12 @@ from maya import cmds
 # Create gear function
 # teeth = Number of teeth the gear will have
 # length = How long the teeth will be
+# height = The height of the object *new*
 
-def createGear(teeth=10, length=0.3):
+def createGear(teeth=10, length=0.3, height=1):
 
     """
-    This function will create a gear object with the given parameters
+    This function will create a gear object with the given parameters,
     To run this from within Maya:
 
         import gearCreator as gc
@@ -18,6 +19,7 @@ def createGear(teeth=10, length=0.3):
 
     :param teeth: The number of teeth to create
     :param length: The length of the teeth
+    :param height: The height of the gear object
     :return: A tuple of the transform, constructor and extrude node
     """
     # Get help in maya console with 'help(gearCreator.createGear)'
@@ -42,14 +44,17 @@ def createGear(teeth=10, length=0.3):
     # We want to hold on to the transform and the constructor of this object
     transform, constructor = cmds.polyPipe(
         # We set the subdivisions axis to the number of spans we defined (teeth * 2)
-        subdivisionsAxis=spans
+        subdivisionsAxis=spans,
+        # Set the height of the object (default 1, see function definition)
+        height=height
     )
 
     # Lets find the faces we want to extrude
     sideFaces = range(
 
         # If we select every other face on the pipe and type ls -sl in the command line we get:
-        # Result: pPipe1.f[40] pPipe1.f[42] pPipe1.f[44] pPipe1.f[46] pPipe1.f[48] pPipe1.f[50] pPipe1.f[52] pPipe1.f[54] pPipe1.f[56] pPipe1.f[58]
+        # Result: pPipe1.f[40] pPipe1.f[42] pPipe1.f[44] pPipe1.f[46] pPipe1.f[48] pPipe1.f[50] pPipe1.f[52]...
+        # pPipe1.f[54] pPipe1.f[56] pPipe1.f[58]
         # (pPipe1.f[40] = face 40) is our starting point for the range
         # teeth = 10, spans = teeth * 2 (20), here is it spans * 2 = 40
         spans * 2,
@@ -111,7 +116,7 @@ def createGear(teeth=10, length=0.3):
 # constructor and extrude are required
 # teeth and length are optional as they are already defined in the createGear function
 
-def changeTeeth(constructor, extrude, teeth=10, length=0.3):
+def changeTeeth(constructor, extrude, teeth=10, length=0.3, height=1):
 
     """
     Change the number of teeth on a gear with a given number of teeth and a given length for the teeth.
@@ -121,6 +126,7 @@ def changeTeeth(constructor, extrude, teeth=10, length=0.3):
         extrude (str): the extrude node
         teeth (int): the number of teeth to create
         length (float): the length of the teeth to create
+        height (int): the height of the gear
     """
 
     # Print the constructor and extrude to confirm we are getting the correct value
@@ -137,7 +143,8 @@ def changeTeeth(constructor, extrude, teeth=10, length=0.3):
         constructor,
         # We are editing an existing object, this tells maya not to create a new object
         edit=True,
-        subdivisionsAxis=spans
+        subdivisionsAxis=spans,
+        height=height
     )
 
     # Lets tell Maya which faces to extrude:
