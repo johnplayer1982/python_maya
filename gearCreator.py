@@ -98,5 +98,5 @@ def createGear(teeth=10, length=0.3):
     # Finally lets return 3 important nodes that we can make use of later
     return transform, constructor, extrude
 
-    # This returns a tuple with 3 nodes:
+    # This returns a tuple of the transform, constructor and extrude node:
     # (u,'pPipe1', u'polyPipe1', u'polyExtrudeFace1')
