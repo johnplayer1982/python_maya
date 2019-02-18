@@ -14,8 +14,16 @@ Example scripts are prefixed with "ex_" and show small examples of methods and f
 
 *objectRenamer.py*
 
-Renames objects based on type and returns a list of all of the renamed objects.
+Adds a suffix to objects based on type and returns a list of all of the renamed objects.
 Camera's are bypassed.
+
+Will rename a selected object, or all objects if no object is selected.  It will also check for the suffix before
+applying to prevent duplicates (eg. polyCube1_geo_geo_geo).
+
+```
+import objectRenamer as obr
+obr.rename()
+```
 
 *gearCreator.py*
 
@@ -26,7 +34,6 @@ Default values are specified in the script (teeth=10, length=0.3)
 ```
 import gearCreator as gc
 gc.createGear()
-
 ```
 
 Or specify override values in the function call
@@ -34,5 +41,4 @@ Or specify override values in the function call
 ```
 import gearCreator as gc
 gc.createGear(teeth=20, length=0.3)
-
 ```
