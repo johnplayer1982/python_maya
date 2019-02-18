@@ -42,3 +42,14 @@ Or specify override values in the function call
 import gearCreator as gc
 gc.createGear(teeth=20, length=0.3)
 ```
+
+You can then modify the gear within Maya using the command:
+
+```
+import gearCreator as gc
+reload(gc)
+gc.createGear(teeth=20, length=0.3)
+gc.changeTeeth(constructor, extrude, teeth=10, length=0.2)
+```
+
+as we return transform, constructor, extrude from the createGear() function.

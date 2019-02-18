@@ -100,3 +100,98 @@ def createGear(teeth=10, length=0.3):
 
     # This returns a tuple of the transform, constructor and extrude node:
     # (u,'pPipe1', u'polyPipe1', u'polyExtrudeFace1')
+
+# Create a new function that can amend and existing gear
+# constructor and extrude are required
+# teeth and length are optional as they are already defined in the createGear function
+
+def changeTeeth(constructor, extrude, teeth=10, length=0.3):
+
+    """
+    Change the number of teeth on a gear with a given number of teeth and a given length for the teeth.
+    This will create a new extrude node.
+    Args:
+        constructor (str): the constructor node
+        extrude (str): the extrude node
+        teeth (int): the number of teeth to create
+        length (float): the length of the teeth to create
+    """
+
+    # Print the constructor and extrude to confirm we are getting the correct value
+    print constructor
+    print extrude
+
+    # Lets change the number of faces on the polyPipe object
+
+    # Again we define the spans (faces)
+    spans = teeth * 2
+
+    cmds.polyPipe(
+        # constructor is the polypipe that we have
+        constructor,
+        # We are editing an existing object, this tells maya not to create a new object
+        edit=True,
+        subdivisionsAxis=spans
+    )
+
+    # Lets tell Maya which faces to extrude:
+    # To get the face values, in maya:
+    # import the maya commands library:
+    # from maya import cmds
+    # print cmds.getAttr('polyExtrudeFace1.inputComponents')
+    # This will give us the list of faces
+
+    # Lets define the face range
+
+    sideFaces = range(
+        # Starting point
+        spans*2,
+        # End point
+        spans*3,
+        # Step up value
+        2
+    )
+
+    # And create an empty variable to store our faces:
+
+    faceNames = []
+
+    # Cycle through each face, using string substitution to construct the correct identifier for each face
+
+    for face in sideFaces:
+        faceName = 'f[%s]' % (face)
+
+        # Add the identifier string to the faceNames list
+        faceNames.append(faceName)
+
+        # Print the faceName
+        print 'This face name:', faceName
+
+    # Take a look at the populated faceNames list
+    print 'Our list of face names:', faceNames
+
+    # Now to set the new attributes:
+    # cmds.setAttr('extrudeNode.inputComponents', numberOfItems, item1, item2, item3, type='componentList')
+
+    cmds.setAttr(
+        # Set the extrude node
+        # We have extrude[0] as extrude alone returns:
+        # [u'polyExtrudeFace1'].inputComponents and we want 'polyExtrudeFace1.inputComponents'
+        '%s.inputComponents' % extrude[0],
+        # Get the length of the nodes (the number of)
+        # This will be given to the setAttr function
+        len(faceNames),
+        # We now also need the list of faces that we will be using
+        # This will expand the faceNames list so that each will be a parameter
+        # This is the same as giving 'f[160], f[162], etc'
+        *faceNames,
+        # Finally lets describe what type of attribute we are changing
+        type="componentList"
+    )
+
+    cmds.polyExtrudeFacet(
+        extrude,
+        edit=True,
+        # ltz is short-form for localTranslateZ (see line 91)
+        ltz=length
+    )
