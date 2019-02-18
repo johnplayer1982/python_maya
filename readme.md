@@ -12,7 +12,7 @@ Example scripts are prefixed with "ex_" and show small examples of methods and f
 
 ## Complete Scripts
 
-*objectRenamer.py*
+### objectRenamer.py
 
 Adds a suffix to objects based on type and returns a list of all of the renamed objects.
 Camera's are bypassed.
@@ -25,22 +25,22 @@ import objectRenamer as obr
 obr.rename()
 ```
 
-*gearCreator.py*
+### gearCreator.py
 
 Allows you to easily create a gear shape.
 
-Default values are specified in the script (teeth=10, length=0.3)
+Default values are specified in the script (teeth=10, length=0.3, height=1)
 
 ```
 import gearCreator as gc
-gc.createGear()
+transform, constructor, extrude = gc.createGear()
 ```
 
 Or specify override values in the function call
 
 ```
 import gearCreator as gc
-gc.createGear(teeth=20, length=0.3)
+transform, constructor, extrude = gc.createGear(teeth=20, length=0.3, height=4)
 ```
 
 You can then modify the gear within Maya using the command:
@@ -48,8 +48,7 @@ You can then modify the gear within Maya using the command:
 ```
 import gearCreator as gc
 reload(gc)
-gc.createGear(teeth=20, length=0.3)
-gc.changeTeeth(constructor, extrude, teeth=10, length=0.2)
+gc.changeTeeth(constructor, extrude, teeth=10, length=0.2, height=2)
 ```
 
 as we return transform, constructor, extrude from the createGear() function.
