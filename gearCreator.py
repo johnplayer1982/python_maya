@@ -18,7 +18,7 @@ def createGear(teeth=10, length=0.3, height=1):
 
     Then modify the object using the changeTeeth function:
 
-        gc.changeTeeth(constructor, extrude, teeth=40, length=0.2)
+        gc.changeTeeth(constructor, extrude, teeth=40, length=0.2, height=0.2)
 
     :param teeth: The number of teeth to create
     :param length: The length of the teeth
