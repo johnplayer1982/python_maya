@@ -1,5 +1,8 @@
 # Python Maya
 
+![](https://vignette.wikia.nocookie.net/autodeskmaya/images/3/31/Python-logo.png/revision/latest?cb=20111021123118 =250x)
+![](https://uigarage.net/wp-content/uploads/2018/12/maya-vector-logo.png =250x)
+
 ## Purpose
 
 This repo stores all of my python scripts for use in Maya.  For help setting up your environment:
