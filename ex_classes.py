@@ -1,4 +1,6 @@
-# Define the class:
+# ---------------------------------------------------------------------------------------------------------------------
+# Define a class
+# ---------------------------------------------------------------------------------------------------------------------
 # Class    = We're defining a class
 # Animal   = We are naming our class
 # (object) =  We are telling the class what to inherit from, in this case we are inheriting from the Python 'object',
@@ -33,6 +35,10 @@ tiger.speak()
 # Output:
 # Hi my name is John and I am a Big cat
 
+# ---------------------------------------------------------------------------------------------------------------------
+# Class Inheritance
+# ---------------------------------------------------------------------------------------------------------------------
+
 # Lets create a new class which inherits from the Animal() class: class Dog(Animal)
 # We'll assume this new animal cant speak, and can only Woof
 
@@ -55,3 +61,33 @@ trevor.speak()
 trevor.walk()
 # Output: I can walk, but not fly!
 # This is because our Dog() class inherits every method from the Animal() base class, and we can access its methods
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Custom Methods
+# ---------------------------------------------------------------------------------------------------------------------
+
+# We can also add custom methods to classes which inherit from base classes:
+# This new class inherits from the base Animal() class, but it has custom attributes
+
+class Fish(Animal):
+
+    # Create a new variable for the custom information
+    activity = None
+
+    # Create a new, custom method for this class
+    def ilike(self):
+        print 'Im a fish! and I love to', self.activity
+
+# Create a new instance of the Fish() class
+bert = Fish()
+
+# Assign the new instance a value for the activity variable
+bert.activity = 'blow bubbles'
+
+# Call the custom method within the Fish() class
+bert.ilike()
+# Output: Im a fish! and I love to blow bubbles
+
+# We can still call the walk method from the core Animal() class:
+bert.walk()
+# Output: I can walk, but not fly!
