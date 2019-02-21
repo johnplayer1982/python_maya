@@ -31,7 +31,7 @@ obr.rename()
 
 Allows you to easily create a gear shape.
 
-Default values are specified in the script (teeth=10, length=0.3, height=1)
+Default values are specified in the script (teeth=10, length=0.3)
 
 ```
 import gearCreator as gc
@@ -42,7 +42,7 @@ Or specify override values in the function call
 
 ```
 import gearCreator as gc
-transform, constructor, extrude = gc.createGear(teeth=20, length=0.3, height=4)
+transform, constructor, extrude = gc.createGear(teeth=20, length=0.3)
 ```
 
 You can then modify the gear within Maya using the command:
@@ -50,7 +50,26 @@ You can then modify the gear within Maya using the command:
 ```
 import gearCreator as gc
 reload(gc)
-gc.changeTeeth(constructor, extrude, teeth=10, length=0.2, height=2)
+gc.changeTeeth(constructor, extrude, teeth=10, length=0.2)
 ```
 
 as we return transform, constructor, extrude from the createGear() function.
+
+### gearClassCreator.py
+
+Same as gearCreator.py in terms of functionality.  Built using classes.
+
+To run from within Maya:
+
+```
+import gearClassCreator as gearCreator
+reload(gearCreator)
+gear = gearCreator.Gear()
+gear.createGear()
+```
+
+To modify
+
+```
+gear.changeTeeth(teeth=12, length=0.4)
+```
