@@ -16,21 +16,46 @@ class Gear(object):
 
     Then modify the object using the changeTeeth function:
 
-        gear.changeTeeth(teeth=12, length=0.4, height=2)
+        gear.changeTeeth(teeth=12, length=0.4)
 
     :param teeth: The number of teeth to create
     :param length: The length of the teeth
-    :param height: The height of the gear object
     :return: A tuple of the transform, constructor and extrude node
     """
 
-    def init(self):
+    # The __init__ method allows us to create default values
+    # When we first 'initialise' a new gear
+    # We can confirm these values in the Maya script editor when we create a new gear object:
+    # ------------------------------------------
+    #   import gearClassCreator as gearCreator
+    #   reload(gearCreator)
+    #   gear = gearCreator.Gear()
+    #   print gear.extrude
+    #
+    #   Output = None
+    # ------------------------------------------
 
+    def __init__(self):
+
+        print 'Running the init method'
+        self.transform = None
+        self.extrude = None
+        self.constructor = None
+
+    # Once we have created the gear:
+    # ------------------------------------------
+    #    gear.createGear()
+    #    print gear.extrude
+    #
+    #    Output = polyExtrudeFace1
+    # ------------------------------------------
+    # We get back the extrude object, as we have defined self.extrude on line 119 in the createGear()
+    # method that we have executed
 
     # Add a create gear method
     # PyCharm automatically adds the self keyword
     # Add the gear parameters
-    def createGear(self, teeth=10, length=0.2, height=1):
+    def createGear(self, teeth=10, length=0.2):
 
         # The number of teeth is the subdivisions multiplied by 2
         # In other words if we want 10 teeth and we are extruding every other face then we need 20 faces in total
@@ -43,9 +68,7 @@ class Gear(object):
 
         self.transform, self.constructor = cmds.polyPipe(
             # We set the subdivisions axis to the number of spans we defined (teeth * 2)
-            subdivisionsAxis=spans,
-            # Set the height of the object (default 1, see function definition)
-            height=height
+            subdivisionsAxis=spans
         )
 
         # Lets find the faces we want to extrude
@@ -91,13 +114,13 @@ class Gear(object):
         # Nice, we have selected every other face
         # We now want to extrude them by the default length we specified in the function definition
 
-        # Create a variable to hold the extrude command
+        # Define self.extrude
         self.extrude = cmds.polyExtrudeFacet(
             # And we'll give it a localTranslate value of length along the Z axis
             localTranslateZ=length
         )
 
-    def changeTeeth(self, teeth=10, length=0.3, height=1):
+    def changeTeeth(self, teeth=10, length=0.2):
 
         """
         Change the number of teeth on a gear with a given number of teeth and a given length for the teeth.
@@ -107,7 +130,6 @@ class Gear(object):
             extrude (str): the extrude node
             teeth (int): the number of teeth to create
             length (float): the length of the teeth to create
-            height (int): the height of the gear
         """
 
         # Lets change the number of faces on the polyPipe object
@@ -116,12 +138,11 @@ class Gear(object):
         spans = teeth * 2
 
         cmds.polyPipe(
-            # constructor is the polypipe that we have
+            # Constructor is the polypipe that we have
             self.constructor,
             # We are editing an existing object, this tells maya not to create a new object
             edit=True,
-            subdivisionsAxis=spans,
-            height=height
+            subdivisionsAxis=spans
         )
 
         # Lets tell Maya which faces to extrude:
