@@ -1,6 +1,6 @@
 # List the attributes of an obkect which can be animated on
 # ---------------------------------------------------------
-# Create an object and select it
+# Create an object in Maya and select it
 # ---------------------------------------------------------
 # import ex_listattr as ex
 # reload(ex)

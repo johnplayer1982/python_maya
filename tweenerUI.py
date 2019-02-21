@@ -44,5 +44,8 @@ def tween(percentage, obj=None, attrs=None, selection=True):
 
     # Output:
     # The obj = pCube1
-    # The attrs we can animate on = [u'visibility', u'translateX', u'translateY', u'translateZ', u'rotateX', u'rotateY', u'rotateZ', u'scaleX', u'scaleY', u'scaleZ']
-
+    # The attrs we can animate on:
+    # u'visibility',
+    # u'translateX', u'translateY', u'translateZ',
+    # u'rotateX', u'rotateY', u'rotateZ',
+    # u'scaleX', u'scaleY', u'scaleZ']
