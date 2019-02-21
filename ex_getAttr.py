@@ -4,7 +4,7 @@ from maya import cmds
 
 # Create a function for this, give it a None shape
 
-def createObject(shape='None'):
+def createObject(shape=None, tx=1, ry=1, sz=1):
 
     # Whack in an if statement just for the craic
     if shape == 'Cube':
@@ -16,9 +16,9 @@ def createObject(shape='None'):
         ourCubeShape = ourCube[0]
 
         # And move it about a bit!
-        cmds.setAttr(ourCubeShape+'.translateX', 2)
-        cmds.setAttr(ourCubeShape+'.rotateY', 45)
-        cmds.setAttr(ourCubeShape+'.scaleZ', 3)
+        cmds.setAttr(ourCubeShape+'.translateX', tx)
+        cmds.setAttr(ourCubeShape+'.rotateY', ry)
+        cmds.setAttr(ourCubeShape+'.scaleZ', sz)
 
         # Lets get the translateX attribute
         ourCubeTX = cmds.getAttr(ourCubeShape+'.translateX')
@@ -33,9 +33,19 @@ def createObject(shape='None'):
         print 'Scale Z Attribute:', ourCubeSZ
 
 # -----------------------------------------------------------------
-# Run from Maya:
+# Run from Maya (Default values):
 # -----------------------------------------------------------------
+#
 # import ex_getAttr as ga
 # reload(ga)
-# ga.createObject(shape='Cube')
+# ga.createObject()
+#
+# -----------------------------------------------------------------
+# Run from Maya (Specify translate, rotate and scale):
+# -----------------------------------------------------------------
+#
+# import ex_getAttr as ga
+# reload(ga)
+# ga.createObject(shape='Cube', tx=2, ry=33, sz=4)
+#
 # -----------------------------------------------------------------
