@@ -8,4 +8,11 @@ class className(object):
 
         print "I won't run unless im called"
 
-# Running
+
+# ---------------------------------------------------------------
+# import ex_init as exin
+# reload(exin)
+# exin.className()
+#
+# Outputs: I run each time my class is executed
+# ---------------------------------------------------------------
