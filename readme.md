@@ -14,9 +14,9 @@ Example scripts are prefixed with "ex_" and show small examples of methods and f
 
 ## Complete Scripts
 
-- [Object Renamer](#objectRenamer.py)
-- [Gear Creator](#gearCreator.py)
-- [Gear Creator - Refined using classes](#gearClassCreator.py)
+- [Object Renamer](#objectRenamerpy)
+- [Gear Creator](#gearCreatorpy)
+- [Gear Creator - Refined using classes](###gearClassCreatorpy)
 
 ### objectRenamer.py
 
