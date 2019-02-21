@@ -14,6 +14,10 @@ Example scripts are prefixed with "ex_" and show small examples of methods and f
 
 ## Complete Scripts
 
+- [Object Renamer](#objectRenamer.py)
+- [Gear Creator](#gearCreator.py)
+- [Gear Creator - Refined using classes](#gearClassCreator.py)
+
 ### objectRenamer.py
 
 Adds a suffix to objects based on type and returns a list of all of the renamed objects.
