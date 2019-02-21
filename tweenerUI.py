@@ -2,6 +2,8 @@
 from maya import cmds
 
 # ------------------------------------------------
+# Firstly create an object (cube, whatever..)
+# ------------------------------------------------
 # import tweenerUI as tui
 # reload(tui)
 # tui.tween(50)
@@ -28,18 +30,19 @@ def tween(percentage, obj=None, attrs=None, selection=True):
     if not obj:
 
         # Object is assigned the first object in the selection
-        obj = cmds.ls(Selection=True)[0]
+        obj = cmds.ls(selection=True)[0]
 
     # If attrs is false
     if not attrs:
 
-        # List the attributes that are available
-        attrs = cmds.listAttr(
-            # List attributes of the object
-            obj,
-            # Which are key-able
-            keyable=True
-        )
+        # Get the attributes that are available for our object
+        # and only show the keyable attributes (Attributes we can animate on)
+        attrs = cmds.listAttr(obj, keyable=True)
 
     # Confirm that we are getting the object and attributes:
     print obj, attrs
+
+    # Output:
+    # The obj = pCube1
+    # The attrs we can animate on = [u'visibility', u'translateX', u'translateY', u'translateZ', u'rotateX', u'rotateY', u'rotateZ', u'scaleX', u'scaleY', u'scaleZ']
+
