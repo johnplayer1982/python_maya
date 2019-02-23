@@ -17,6 +17,7 @@ Example scripts are prefixed with "ex_" and show small examples of methods and f
 - [Object Renamer](#objectRenamerpy)
 - [Gear Creator](#gearCreatorpy)
 - [Gear Creator - Refined using classes](#gearClassCreatorpy)
+- [Step Creator](#stepCreatorpy)
 
 ### objectRenamer.py
 
@@ -76,4 +77,21 @@ To modify
 
 ```
 gear.changeTeeth(teeth=12, length=0.4)
+```
+
+### stepCreator.py
+
+Create a simple straight staircase, define the width and number of steps or define in the function call:
+
+```
+import stepCreator as sc
+reload(sc)
+makesteps = sc.stepCreator()
+makesteps.makesteps()
+```
+
+With arguments:
+
+```
+makesteps.makesteps(steps=50, width=8)
 ```
