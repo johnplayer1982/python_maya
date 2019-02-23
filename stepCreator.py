@@ -5,9 +5,24 @@
 # Import the maya commands library
 from maya import cmds
 
-# Create a new class
-
 class stepCreator(object):
+
+    """
+    This class will create a set of steps with the given parameters,
+    To run this from within Maya:
+
+        import stepCreator as sc
+        reload(sc)
+        makesteps = sc.stepCreator()
+        makesteps.makesteps()
+
+    Example of arguments:
+
+        makesteps.makesteps(steps=50, width=8)
+
+    :param steps: The number of steps
+    :param width: The width of the steps
+    """
 
     # Create initialize class
     def __init__(self):
@@ -33,16 +48,10 @@ class stepCreator(object):
             start_y += 1
             start_z += 1
 
-            print thisCubeShape
+            print 'Step ' + thisCubeShape + ' Added'
 
             count += 1
 
-        # [WIP - Adds bannister]
-        if count == steps:
-
-            print 'Stairs done, Adding bannister'
-
-            leftbannister = cmds.polyCube()
-            leftbannisterShape = leftbannister[0]
-
-            cmds.setAttr(leftbannisterShape+'.tx', width/2)
+# To enhance:
+# - bannisters
+# - angle: for spiralled, curved stairs
