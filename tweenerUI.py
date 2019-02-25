@@ -17,35 +17,33 @@ from maya import cmds
 
 def tween(percentage, obj=None, attrs=None, selection=True):
 
-    # If selection is False (Nothing selected in Maya) and the obj is None we'll get an error
-    # So lets catch this in our code:
-
-    # If object is none, and selection is False
+    # Raise an error if obj is not given and selection is False
     if not obj and not selection:
+        raise ValueError('No object selected to tween')
 
-        # Throw the error
-        raise ValueError("No object given to tween")
+    # To see the above value error run:
+    # ---------------------------------
+    # tween(12, selection=False)
+    # ---------------------------------
 
-    # If obj is False (None is 'Falsey')
+    # If no object is specified, get it from the first selection
     if not obj:
 
-        # Object is assigned the first object in the selection
+        # Get the first object in the selection
         obj = cmds.ls(selection=True)[0]
 
-    # If attrs is false
     if not attrs:
 
-        # Get the attributes that are available for our object
-        # and only show the keyable attributes (Attributes we can animate on)
+        # Query the object that we got from the selection
+        # List all of the attributes on it that are keyable (we can animate)
         attrs = cmds.listAttr(obj, keyable=True)
 
-    # Confirm that we are getting the object and attributes:
-    print obj, attrs
+        # This will give is all the attributes that can be animated on
+        print 'Nice! we can animate on:', obj, 'with the following attributes: ', attrs
 
-    # Output:
-    # The obj = pCube1
-    # The attrs we can animate on:
-    # u'visibility',
-    # u'translateX', u'translateY', u'translateZ',
-    # u'rotateX', u'rotateY', u'rotateZ',
-    # u'scaleX', u'scaleY', u'scaleZ']
+    # Get the current time (Maya timeline)
+    # query=True means that we just want to get the time, not change it
+    currentTime = cmds.currentTime(query=True)
+
+    # Confirm we are getting the current time
+    print currentTime
