@@ -1,6 +1,7 @@
 from maya import cmds
 from tweenerUI import tween
 from gearClassCreator import Gear
+from stepCreator import stepCreator
 
 # -------------------------
 # import reusableUI as rui
@@ -91,7 +92,7 @@ class GearUI(BaseWindow):
 
         column = cmds.columnLayout()
 
-        cmds.text(label="use te slider to modify the gear")
+        cmds.text(label="use the slider to modify the gear")
 
         cmds.rowLayout(numberOfColumns=4)
 
@@ -152,3 +153,38 @@ class GearUI(BaseWindow):
 
         # Reset the slider label to 10
         cmds.text(self.label, edit=True, label=10)
+
+# -------------------------
+# import reusableUI as rui
+# reload(rui)
+# rui.StepUI().show()
+# -------------------------
+
+class StepUI(BaseWindow):
+
+    windowName = 'StepWindow'
+
+    def buildUI(self):
+
+        column = cmds.columnLayout()
+        cmds.text(label="Use the slider to select the number of steps")
+        cmds.rowLayout(numberOfColumns=4)
+
+        self.label = cmds.text(label="5")
+        self.slider = cmds.intSlider(min=2, max=30, value=5, step=1, dragCommand=self.updateLabel)
+
+        cmds.button(label="Make Steps", command=self.makeSteps)
+        cmds.setParent(column)
+        cmds.button(label="Close", command=self.close)
+
+    def makeSteps(self, steps):
+
+        print 'Making Steps'
+
+        stepNumber = cmds.intSlider(self.slider, query=True, value=True)
+        self.steps = stepCreator()
+        self.steps.makesteps(steps=stepNumber)
+
+    def updateLabel(self, stepNumber):
+
+        cmds.text(self.label, edit=True, label=stepNumber)
