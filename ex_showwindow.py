@@ -7,6 +7,7 @@
 
 # Import the Maya commands library
 from maya import cmds
+import random
 
 class showWindow(object):
 
@@ -51,6 +52,10 @@ class showWindow(object):
 
         cmds.button(label='Do Nothing')
 
+        # A button that triggers a function
+
+        cmds.button(label='Create cubes', command=self.createCubes)
+
         # Close button with a command to delete the UI
 
         cmds.button(label='Close', command=('cmds.deleteUI(\"' + window + '\", window=True)'))
@@ -71,6 +76,29 @@ class showWindow(object):
 
         cmds.text(self.label, edit=True, label=value)
         print value
+
+    def createCubes(self, *args):
+
+        # Give us something to increment
+        count = 0
+
+        # Query the slider to see how many cubes to make
+        cubes = cmds.intSlider(self.slider, query=True, value=True)
+
+        # Create some cubes!
+        while count < cubes:
+
+            # Create the cube
+            cube = cmds.polyCube()
+            cubeshape = cube[0]
+
+            # Place the cube at random
+            cmds.setAttr(cubeshape+".translateX", random.randrange(-10, 10))
+            cmds.setAttr(cubeshape+".translateY", random.randrange(-10, 10))
+            cmds.setAttr(cubeshape+".translateZ", random.randrange(-10, 10))
+
+            # Increment the count
+            count += 1
 
 
 
