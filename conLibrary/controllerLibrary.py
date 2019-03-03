@@ -79,7 +79,6 @@ class ControllerLibrary(dict):
             # force=True = if the file already exists we want to save over it (by force)
             cmds.file(save=True, type='mayaAscii', force=True)
 
-
         # To test we can create a new instance of our library class in the Maya script editor
         # -------------------------------------------------------
         # from conLibrary import controllerLibrary
@@ -88,4 +87,102 @@ class ControllerLibrary(dict):
         # lib.save('test')
         # -------------------------------------------------------
         # Go to the maya application folder to confirm the new maya file has been created
+
+        # To prevent us having to run lib.find() each time we save a new file to refresh our library
+        # We can update the dictionary (self) with the path each time we save
+        self[name] = path
+
+    # Create a find method to find our files
+    # Define the directory, We'll use the directory we have already defined (line 31)
+    def find(self, directory=DIRECTORY):
+
+        # Create an if statement to catch if the directory path doesn't exist (DIRECTORY)
+        # os.path.exists = Check for the existence of the directory we pass as an argument
+        if not os.path.exists(directory):
+
+            # return = We wont continue, halt this method here!
+            return
+
+        # Therefore if the directory does exist we need to list the files
+        # Create a new variable to store the file list in:
+        # os.listdir = list the files in the directory given as an argument
+        files = os.listdir(directory)
+
+        # Our files variable will contain a list of ALL files
+        # We only want .ma maya files in our library
+        # Lets exclude all other files
+        # We'll use list comprehension
+        mayaFiles = [f for f in files if f.endswith('.ma')]
+
+        # This is the same as doing the following, but more efficient:
+        # --------------------------
+        # mayaFiles = []
+        # for f in files:
+        #    if f.endswith('.ma'):
+        #        mayaFiles.append(f)
+        # --------------------------
+
+        print 'Maya files in directory:', mayaFiles
+
+        # Now we have found our maya files, we can loop through them
+        # and add them to our dictionary:
+        for ma in mayaFiles:
+
+            # We just need the name, not including the extension (.ma)
+            # This will split the extension (ma) and the filename
+            # It returns the name and the extension
+            name, ext = os.path.splitext(ma)
+
+            # Now we have the names we need to store this in our dicitonary along with the path to the file
+            # Construct the path to the directory based on the file we are on in the list (ma in mayaFiles)
+            # os.path.join(path, path) = Accepts 2 argument, 2 paths to join
+            path = os.path.join(directory, ma)
+
+            print 'Path:', path
+
+            # Remember that this is a dictionary, and we defined this class as
+            # one on line 53 (class ControllerLibrary(dict)
+            # Assign the dictionary key 'name' to the path we have just constructed using the .join command
+
+            self[name] = path
+
+            # If we now run the following in Maya
+            # print lib
+            # We get back a dictionary with a key (the file name) and a value (the path to the file)
+            # {u 'key' , u '/path/to/file', u 'key' , u '/path/to/file', u 'key' , u '/path/to/file'}
+
+        # We can make the output of the dictionary easier to read using the pprint module:
+        # pprint = Use the pretty print module
+        # pprint.pprint = to pretty print
+        # pprint.pprint(self) = self, which is our dictionary
+        pprint.pprint(self)
+
+        # This will print each dictionary entry to a single line, improving readbility
+        # {u 'key', u '/path/to/file',
+        #  u 'key', u '/path/to/file',
+        #  u 'key', u '/path/to/file',
+        # }
+
+    # Load the files back in to Maya
+    # Create a load method
+    # Pass it the 'name' to load
+    def load(self, name):
+
+        # Get the path
+        path = self[name]
+
+        # import the file
+        # i=True : Import = True
+        # usingNamespaces = False : Our controller wont be imported into a secondary namespace
+        #
+        cmds.file(path, i=True, usingNamespaces=False)
+
+        # We can now import our test controller using:
+        # --------------------------------------------
+        # from conLibrary import controllerLibrary
+        # reload(controllerLibrary)
+        # lib = controllerLibrary.ControllerLibrary()
+        # lib.find()
+        # lib.load('test')
+        # --------------------------------------------
 
