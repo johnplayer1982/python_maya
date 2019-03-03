@@ -48,15 +48,41 @@ def createDirectory(directory=DIRECTORY):
         os.mkdir(directory)
 
 # Create a class to manage our controllers
-# Inherits from dict, dictionarys are a good way to save
+# Inherits from dict, dictionaries are a good way to save
 # information about something, as we can include a name, details and screenshots of a single item
 class ControllerLibrary(dict):
 
     # Create the save method
     # We add the 2 parameters that are required for us to save our file
-    # The name and the directory, we'll default the directory to what we deined
+    # The name and the directory, we'll default the directory to what we defined
     # earlier (see line 31)
-    def save(self, name, directory=DIRECTORY):
+    # **info allows us to save any additional arguments passed into this function
+    # **info allows for extra user flexibility to save any information, useful for our .json feed
+    # Any arguments which aren't defined in our function below (name, directory) will be stored in the **info variable
+    # **info is a dictionary by default
+    # screenshot=True : We want to save a screenshot of our controller
+    def save(self, name, directory=DIRECTORY, screenshot=True, **info):
+
+        # If we pass not additional arguments to the function:
+        # -------------------------------------------
+        # from conLibrary import controllerLibrary
+        # reload(controllerLibrary)
+        # lib = controllerLibrary.ControllerLibrary()
+        #
+        # lib.save('test2')
+        # -------------------------------------------
+        # info will return an empty dictionary: {}
+        # However if we pass any random args:
+        # -------------------------------------------
+        # from conLibrary import controllerLibrary
+        # reload(controllerLibrary)
+        # lib = controllerLibrary.ControllerLibrary()
+        #
+        # lib.save('test2', chicken=True, rice='nice')
+        # -------------------------------------------
+        # Then info will contain the additional arguments:
+        # {'chicken': True, 'rice': 'nice'}
+        print 'Info, see line 63:', info
 
         # Lets call the createDirectory() function to create the directory if we havent already
         # We tell is to use the value in the class variable 'directory' (see 59)
@@ -67,6 +93,15 @@ class ControllerLibrary(dict):
         # directory = Either the default directory or one we provide in the function call
         # '%s.ma' =  We substitute %s with our 'name' and .ma is the maya file extension
         path = os.path.join(directory, '%s.ma' % name)
+
+        # Create a path for the json file
+        # This is similar to the .ma file above, this is our info file
+        infoFile = os.path.join(directory, '%s.json' % name)
+
+        # Because we know that **info is a dictionary by default
+        # we should add some more information to it, like a name and path
+        info['name'] = name
+        info['path'] = path
 
         # Rename the file to what we specified in 'path', above on line 69
         cmds.file(rename=path)
@@ -88,8 +123,40 @@ class ControllerLibrary(dict):
         # -------------------------------------------------------
         # Go to the maya application folder to confirm the new maya file has been created
 
+        # Save a screenshot of the controller to be displayed in the UI library
+        # If screenshot is set to True (default)
+        if screenshot:
+
+            # Run the saveScreenshot method
+            info['screenshot'] = self.saveScreenshot(name, directory=directory)
+
+
+
+        # Break this down:
+        # With an open file (infoFile is the path name to this file)
+        # We'll open it in 'write' mode ('w')
+        # And we store this open file in a temporary variable called 'f'
+        with open(infoFile, 'w') as f:
+
+            # With this variable 'f', use json to dump the 'info' dictionary see line 63
+            # into 'f', which is the file stream we have just opened
+            # and we are going to indent everything by 4 spaces
+            json.dump(info, f, indent=4)
+
+        # Test the writing of the json file by running the following:
+        # -------------------------------------------------------
+        # from conLibrary import controllerLibrary
+        # reload(controllerLibrary)
+        # lib = controllerLibrary.ControllerLibrary()
+        # lib.find()
+        # lib.save('infoTest', chicken=True, rice='nice')
+        # -------------------------------------------------------
+        # A new .json file will be created called infoTest.json
+        # And it will contain the chicken and rice values, indented by 4 spaces
+
         # To prevent us having to run lib.find() each time we save a new file to refresh our library
-        # We can update the dictionary (self) with the path each time we save
+        # We can update the dictionary (self) with the info dictionary each time we save
+        # As the info dictionary contains all the information we need
         self[name] = path
 
     # Create a find method to find our files
@@ -138,13 +205,49 @@ class ControllerLibrary(dict):
             # os.path.join(path, path) = Accepts 2 argument, 2 paths to join
             path = os.path.join(directory, ma)
 
+            # Find the json file, which will be called the same as our .ma maya file
+            # Se we can use string substitution to construct the .json filename
+            infoFile =  '%s.json' % name
+
+            # Check if the infoFile (json) is in the files we listed (line 166)
+            if infoFile in files:
+
+                # If it is, then we can construct the full path
+                # We already know the directory from earlier
+                # And we have just defined the infoFile based on the file name (line 200)
+                infoFile = os.path.join(directory, infoFile)
+
+                # We can now read the file
+                # 'r' refers to 'read' mode, as apposed to 'w' write mode
+                with open(infoFile, 'r') as f:
+
+                    # Store the json data in a new variable
+                    info = json.load(f)
+                    pprint.pprint(info)
+
+            # Otherwise if there is no infofile already
+            else:
+                print 'No info found'
+
+                # Define that info is an empty dictionary
+                # We do this so that 'info' is always a dictionary
+                info = {}
+
+            # Check if a screenshot exists
+            screenshot = '%s.jpg' % name
+            if screenshot in files:
+                info['screenshot'] = os.path.join(directory, name)
+
+            info['name'] = name
+            info['path'] = path
+
             print 'Path:', path
 
             # Remember that this is a dictionary, and we defined this class as
             # one on line 53 (class ControllerLibrary(dict)
             # Assign the dictionary key 'name' to the path we have just constructed using the .join command
 
-            self[name] = path
+            self[name] = info
 
             # If we now run the following in Maya
             # print lib
@@ -168,13 +271,12 @@ class ControllerLibrary(dict):
     # Pass it the 'name' to load
     def load(self, name):
 
-        # Get the path
-        path = self[name]
+        # Get the path from the self dictionary
+        path = self[name]['path']
 
         # import the file
         # i=True : Import = True
         # usingNamespaces = False : Our controller wont be imported into a secondary namespace
-        #
         cmds.file(path, i=True, usingNamespaces=False)
 
         # We can now import our test controller using:
@@ -186,3 +288,25 @@ class ControllerLibrary(dict):
         # lib.load('test')
         # --------------------------------------------
 
+    def saveScreenshot(self, name, directory=DIRECTORY):
+
+        # Create the path, which is our directory + the file name
+        path = os.path.join(directory, '%s.jpg' % name)
+
+        # Make sure the maya view fits exactly around our controller
+        cmds.viewFit()
+
+        # Tell maya how to save out the image (.jpeg, png?, width, height etc)
+        # Set the file type to JPEG (8 is the value in the maya render settings interface, makes little sense)
+        cmds.setAttr('defaultRenderGlobals.imageFormat', 8)
+
+        # Render this out using the playblast command
+        # The complete filename is our path (where this is saved to)
+        # forceOverwrite=True : Write over an existing one, so we dont get a dialog
+        # showOrnaments : ornaments are parts of the viewport which arent in our scene
+        # startTime = 1, endTime = 1 : We only want 1 image
+        # viewer : We dont want this to open up in an image viewer once saved
+        cmds.playblast(completeFilename=path, forceOverwrite=True, format='image', width=200, height=200,
+                       showOrnaments=False, startTime=1, endTime=1, viewer=False)
+
+        return path
