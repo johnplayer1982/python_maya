@@ -163,6 +163,9 @@ class ControllerLibrary(dict):
     # Define the directory, We'll use the directory we have already defined (line 31)
     def find(self, directory=DIRECTORY):
 
+        # Clear the library first to make sure we catch any deleted files
+        self.clear()
+
         # Create an if statement to catch if the directory path doesn't exist (DIRECTORY)
         # os.path.exists = Check for the existence of the directory we pass as an argument
         if not os.path.exists(directory):
@@ -248,23 +251,6 @@ class ControllerLibrary(dict):
             # Assign the dictionary key 'name' to the path we have just constructed using the .join command
 
             self[name] = info
-
-            # If we now run the following in Maya
-            # print lib
-            # We get back a dictionary with a key (the file name) and a value (the path to the file)
-            # {u 'key' , u '/path/to/file', u 'key' , u '/path/to/file', u 'key' , u '/path/to/file'}
-
-        # We can make the output of the dictionary easier to read using the pprint module:
-        # pprint = Use the pretty print module
-        # pprint.pprint = to pretty print
-        # pprint.pprint(self) = self, which is our dictionary
-        pprint.pprint(self)
-
-        # This will print each dictionary entry to a single line, improving readbility
-        # {u 'key', u '/path/to/file',
-        #  u 'key', u '/path/to/file',
-        #  u 'key', u '/path/to/file',
-        # }
 
     # Load the files back in to Maya
     # Create a load method
