@@ -6,14 +6,15 @@
 # -------------------------------
 
 from maya import cmds
+import pprint
 
-def boundingBox(nodes=None):
+def boundingBox():
 
      # Create a couple of objects
     cube = cmds.polyCube()
     sphere = cmds.polySphere()
 
-    # Get the names of both objects
+    # Get the shapes of both objects
     cubeShape = cube[0]
     sphereShape = sphere[0]
 
@@ -36,10 +37,12 @@ def boundingBox(nodes=None):
         # Add the bounding box for this node to the bboxes list
         bboxes[node] = bbox
 
-        print bbox
+        print node, bbox
         # We'll get back a list of 6 float (0.00) values for each object:
         # They are in order of XYZ XYZ
         # X min, Y min, Z min, X max, Y max, Z max
         # These values define the bounds of the bounding box
         # [-0.5, -0.5, -0.5, 0.5, 0.5, 0.5]
         # [-1.000000238418579, -1.0, -1.0000004768371582, 1.0, 1.0, 1.0000001192092896]
+
+    print pprint.pprint(bboxes)
